@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # Docker 容器内通过服务名 mysql 连接数据库，连接信息由 docker-compose 环境变量注入
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/todo_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql

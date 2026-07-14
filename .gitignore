@@ -1,0 +1,47 @@
+# ===== 环境变量（含密码，不提交）=====
+.env
+.env.local
+.env.*.local
+
+# ===== 后端 =====
+backend/target/
+backend/.idea/
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# ===== 前端 =====
+frontend/node_modules/
+frontend/dist/
+frontend/.idea/
+frontend/*.iml
+
+# ===== Docker 备份/临时文件 =====
+dd-backup/
+docker-desktop-backup-*/
+*.ps1
+
+# ===== IDE / 编辑器 =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===== ZCode 临时文件 =====
+.zcode/
+
+# ===== WSL 调试临时文件 =====
+.wsl_state.txt
+.wsl_update.txt
+
+# ===== 日志和临时文件 =====
+*.log
+*.tmp
+*.bak
+
+# ===== Windows 临时文件 =====
+Thumbs.db
+Desktop.ini
