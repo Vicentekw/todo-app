@@ -9,6 +9,8 @@ import com.example.todo.service.TodoService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 待办事项控制器
@@ -30,9 +32,17 @@ public class TodoController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) Integer completed,
+            @RequestParam(required = false) Integer priority,
             @RequestParam(required = false) String keyword) {
         Long userId = UserContext.getCurrentUserId();
-        return Result.success(todoService.page(userId, pageNum, pageSize, completed, keyword));
+        return Result.success(todoService.page(userId, pageNum, pageSize, completed, priority, keyword));
+    }
+
+    /** 统计当前用户的待办数据 */
+    @GetMapping("/stats")
+    public Result<Map<String, Object>> stats() {
+        Long userId = UserContext.getCurrentUserId();
+        return Result.success(todoService.stats(userId));
     }
 
     /** 查询单条待办 */
@@ -61,6 +71,22 @@ public class TodoController {
     public Result<Todo> toggle(@PathVariable Long id) {
         Long userId = UserContext.getCurrentUserId();
         return Result.success(todoService.toggleCompleted(userId, id));
+    }
+
+    /** 批量完成 */
+    @PatchMapping("/batch/toggle")
+    public Result<Integer> batchToggle(@RequestBody Map<String, List<Long>> body) {
+        Long userId = UserContext.getCurrentUserId();
+        List<Long> ids = body.get("ids");
+        return Result.success("批量完成成功", todoService.batchToggle(userId, ids));
+    }
+
+    /** 批量删除 */
+    @DeleteMapping("/batch")
+    public Result<Integer> batchDelete(@RequestBody Map<String, List<Long>> body) {
+        Long userId = UserContext.getCurrentUserId();
+        List<Long> ids = body.get("ids");
+        return Result.success("批量删除成功", todoService.batchDelete(userId, ids));
     }
 
     /** 删除待办 */

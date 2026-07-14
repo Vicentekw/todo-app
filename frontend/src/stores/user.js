@@ -17,6 +17,14 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
   }
 
+  // 更新昵称（修改资料后同步）
+  function updateNickname(nickname) {
+    if (userInfo.value) {
+      userInfo.value = { ...userInfo.value, nickname }
+      localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
+    }
+  }
+
   // 登出，清理状态
   function logout() {
     token.value = ''
@@ -25,5 +33,5 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('userInfo')
   }
 
-  return { token, userInfo, setLogin, logout }
+  return { token, userInfo, setLogin, updateNickname, logout }
 })

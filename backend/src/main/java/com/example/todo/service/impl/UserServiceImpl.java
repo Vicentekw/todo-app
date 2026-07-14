@@ -2,9 +2,12 @@ package com.example.todo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.todo.common.BusinessException;
+import com.example.todo.dto.ChangePasswordRequest;
 import com.example.todo.dto.LoginRequest;
 import com.example.todo.dto.LoginResponse;
 import com.example.todo.dto.RegisterRequest;
+import com.example.todo.dto.UpdateProfileRequest;
+import com.example.todo.dto.UserProfile;
 import com.example.todo.entity.User;
 import com.example.todo.mapper.UserMapper;
 import com.example.todo.security.JwtUtils;
@@ -54,5 +57,45 @@ public class UserServiceImpl implements UserService {
 
         String token = jwtUtils.generateToken(user.getId(), user.getUsername());
         return new LoginResponse(token, user.getId(), user.getUsername(), user.getNickname());
+    }
+
+    @Override
+    public UserProfile getProfile(Long userId) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        return new UserProfile(user.getId(), user.getUsername(), user.getNickname());
+    }
+
+    @Override
+    public UserProfile updateProfile(Long userId, UpdateProfileRequest request) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        if (request.getNickname() != null && !request.getNickname().trim().isEmpty()) {
+            user.setNickname(request.getNickname());
+            userMapper.updateById(user);
+        }
+        return new UserProfile(user.getId(), user.getUsername(), user.getNickname());
+    }
+
+    @Override
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        // 校验原密码
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new BusinessException("原密码错误");
+        }
+        // 新旧密码不能相同
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new BusinessException("新密码不能与原密码相同");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userMapper.updateById(user);
     }
 }

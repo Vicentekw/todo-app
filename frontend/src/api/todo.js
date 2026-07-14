@@ -9,6 +9,14 @@ export function getTodoList(params) {
   })
 }
 
+// 查询待办统计
+export function getTodoStats() {
+  return request({
+    url: '/todos/stats',
+    method: 'get'
+  })
+}
+
 // 查询单条待办
 export function getTodo(id) {
   return request({
@@ -40,6 +48,24 @@ export function toggleTodo(id) {
   return request({
     url: `/todos/${id}/toggle`,
     method: 'patch'
+  })
+}
+
+// 批量完成
+export function batchToggleTodo(ids) {
+  return request({
+    url: '/todos/batch/toggle',
+    method: 'patch',
+    data: { ids }
+  })
+}
+
+// 批量删除
+export function batchDeleteTodo(ids) {
+  return request({
+    url: '/todos/batch',
+    method: 'delete',
+    data: { ids }
   })
 }
 

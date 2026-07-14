@@ -29,6 +29,12 @@ public class Todo {
     /** 是否完成：0 未完成 1 已完成 */
     private Integer completed;
 
+    /** 优先级：0 低 1 中 2 高 */
+    private Integer priority;
+
+    /** 截止日期 */
+    private LocalDateTime dueDate;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 

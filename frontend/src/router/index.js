@@ -17,6 +17,12 @@ const routes = [
     name: 'Todo',
     component: () => import('@/views/Todo.vue'),
     meta: { title: '待办事项', requiresAuth: true }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/views/Profile.vue'),
+    meta: { title: '个人中心', requiresAuth: true }
   }
 ]
 
